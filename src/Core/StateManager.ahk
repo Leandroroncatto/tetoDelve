@@ -13,3 +13,7 @@ FukkiGetState(key, default := "") {
     global FukkiState
     return FukkiState.Has(key) ? FukkiState[key] : default
 }
+
+FukkiSetRunning(running) {
+    FukkiSetState("Running", running)
+}

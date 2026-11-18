@@ -128,6 +128,10 @@ F2:: {
         DelveSetProcess("PLEASE SELECT A MOVEMENT OR A MOUSE PATTERN", "")
         return
     }
+    DelveGoToMine()
+    DelveSelectIsland()
+    DelveEnterMine()
+    DelveSetProcess("RUNNING", "Mine loaded")
     DelveStartRunTimer()
     DelveController.Start()
 }

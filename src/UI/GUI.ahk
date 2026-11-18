@@ -2,8 +2,8 @@
 #SingleInstance Force
 
 ; Basic Application Info
-global aaTitle := ""
-global version := ""
+global aaTitle := "tetoMacro"
+global version := " - tetoDelve"
 global rblxID := "ahk_exe RobloxPlayerBeta.exe"
 ;Coordinate and Positioning Variables
 global targetWidth := 816
@@ -66,7 +66,6 @@ setupOutputFile()
 
 ;------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------MAIN UI------
 aaMainUI.BackColor := uiTheme[2]
-global Webhookdiverter := aaMainUI.Add("Edit", "x0 y0 w1 h1 +Hidden", "") ; diversion
 uiBorders.Push(aaMainUI.Add("Text", "x0 y0 w1364 h1 +Background" uiTheme[3]))  ;Top line
 uiBorders.Push(aaMainUI.Add("Text", "x0 y0 w1 h630 +Background" uiTheme[3]))   ;Left line
 uiBorders.Push(aaMainUI.Add("Text", "x1363 y0 w1 h630 +Background" uiTheme[3])) ;Right line
@@ -91,7 +90,7 @@ AddImageToGui(gui, image, options, text := "") {
     return display
 }
 
-AddImageToGui(aaMainUI, Fukki, "xm+0 x1238 y530")
+AddImageToGui(aaMainUI, TetoGif, "xm+0 x1238 y530")
 global FakeFukki := aaMainUI.Add("Picture", "x1270 y550 w80 h80 +BackgroundTrans", Discord)
 
 ;Global Fukki := aaMainUI.Add("Picture", "x1238 y530 w125 h100", Fukki)
@@ -123,8 +122,8 @@ aaMainUI.SetFont("s12 Bold c" uiTheme[1], "Segoe UI")
 
 aaMainUI.SetFont("bold s9 q5 c" uiTheme[1], "Segoe UI")
 Hotkeytext := aaMainUI.Add("Text", "x807 y35 w200 h30", "F1: Position roblox")
-Hotkeytext2 := aaMainUI.Add("Text", "x807 y50 w200 h30", "F2: Start mango")
-Hotkeytext3 := aaMainUI.Add("Text", "x807 y65 w200 h30", "F3: Stop mango")
+Hotkeytext2 := aaMainUI.Add("Text", "x807 y50 w200 h30", "F2: Start Delve")
+Hotkeytext3 := aaMainUI.Add("Text", "x807 y65 w200 h30", "F3: Stop macro")
 ;--------------MODE SELECT;--------------MODE SELECT;--------------MODE SELECT;--------------MODE SELECT;--------------MODE SELECT;--------------MODE SELECT
 global modeSelectionGroup := aaMainUI.Add("GroupBox", "x808 y120 w500 h45 Background" uiTheme[2], "Mode Select")
 aaMainUI.SetFont("s10 c" uiTheme[1])
@@ -149,6 +148,13 @@ if (FukkiGetState("Game") = "Delve") {
     DelveSaveConfigButton.OnEvent("Click", (*) => SaveDelveConfig())
     aaMainUI.SetFont("bold s9 q5 c" uiTheme[1], "Segoe UI")
     global DelveAutoDash := aaMainUI.Add("Checkbox", "x808 y205 w170 h24", "Auto Dash")
+    global DelveAutoDashHelp := aaMainUI.Add("Text", "x978 y205 w18 h18 +Center +Border", "?")
+    DelveAutoDashHelp.OnEvent("Click", (*) => MsgBox(
+        "Auto Dash sends Q every 500 ms while ORE is detected."
+        "`nIt is not recommended because it can break the timing of your movement pattern."
+        "`nDisable it if Left/Right or Top/Bottom movement becomes inconsistent.",
+        "Auto Dash",
+        "Ok Iconi"))
     aaMainUI.Add("Text", "x808 y240 w90 h20", "Walk Speed")
     global DelveWalkSpeed := aaMainUI.Add("Edit", "x888 y238 w55 h22 Number c" uiTheme[7], "34.9")
     global DelveWalkSpeedHelp := aaMainUI.Add("Picture", "x948 y238 w18 h18", HelpImg)

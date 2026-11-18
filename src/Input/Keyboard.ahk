@@ -1,3 +1,0 @@
-FukkiKeyboardSend(keys) {
-    SendInput(keys)
-}

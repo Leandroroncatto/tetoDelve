@@ -1,7 +1,3 @@
-FukkiFindText(&foundX, &foundY, x1, y1, x2, y2, pattern, textColor := 0, bgColor := 0) {
-    return FindText(&foundX, &foundY, x1, y1, x2, y2, textColor, bgColor, pattern)
-}
-
 FukkiClickText(foundX, foundY, relativeX := 0, relativeY := 0) {
     return FindText().Click(foundX + relativeX, foundY + relativeY, "L")
 }
@@ -13,8 +9,4 @@ FukkiFindRegisteredPattern(gameName, patternName, &foundX, &foundY, textColor :=
     return FindText(&foundX, &foundY,
         registered.X1, registered.Y1, registered.X2, registered.Y2,
         textColor, bgColor, registered.Pattern)
-}
-
-FukkiOpenPatternCapture() {
-    FindText().Gui("Show")
 }

@@ -1,7 +1,6 @@
 class DelveController {
     static LastState := ""
     static EquippedKey := ""
-    static ScanCount := 0
     static CandidateState := ""
     static CandidateCount := 0
     static ReplayLastClick := 0
@@ -9,7 +8,6 @@ class DelveController {
     static MovementKey := ""
     static MovementDirection := ""
     static MovementDuration := 2000
-    static MousePatternTimerActive := false
     static MousePatternDirection := "Up"
     static MouseSquareIndex := 0
 
@@ -26,20 +24,16 @@ class DelveController {
         FukkiSetRunning(true)
         DelveController.LastState := ""
         DelveController.EquippedKey := ""
-        DelveController.ScanCount := 0
         DelveController.CandidateState := ""
         DelveController.CandidateCount := 0
         DelveController.ReplayLastClick := 0
         DelveController.ReplayCandidateCount := 0
         DelveController.MousePatternDirection := "Up"
         DelveController.MouseSquareIndex := 0
-        DelveController.MouseSquareIndex := 0
         DelveController.MovementKey := ""
         DelveController.MovementDirection := ""
         SetTimer(DelveTick, 100)
         DelveUpdateAutoReplayTimer()
-        DelveStartMovementPattern()
-        DelveStartMousePattern()
         return true
     }
 
@@ -48,6 +42,7 @@ class DelveController {
         SetTimer(DelveAutoReplayTick, 0)
         DelveStopMovementPattern()
         DelveStopMousePattern()
+        DelveStopAutoDash()
         FukkiSetRunning(false)
         FukkiSetDelveState("Stopped")
     }
@@ -94,6 +89,15 @@ class DelveController {
             SendInput(keyToSend)
             FukkiLog("Delve state: " stateName " - equipped key " keyToSend)
         }
+        if (stateName = "ORE") {
+            DelveStartMovementPattern()
+            DelveStartMousePattern()
+            DelveStartAutoDash()
+        } else {
+            DelveStopMovementPattern()
+            DelveStopMousePattern()
+            DelveStopAutoDash()
+        }
     }
 }
 
@@ -112,6 +116,101 @@ DelveStop() {
     DelveController.Stop()
 }
 
+DelveGoToMine() {
+    DelveSetProcess("OPENING MENU", "Go to Mine...")
+    CoordMode "Mouse", "Screen"
+    MouseMove(396, 62)
+    Sleep(20)
+    MouseClick("Left", 396, 62)
+}
+
+DelveSelectIsland() {
+    islandName := FukkiGetState("DelveIsland", "")
+    switch islandName {
+        case "GRASSLANDS":
+            DelveSetProcess("SELECTING ISLAND", "GRASSLANDS")
+            Sleep(500)
+            DelveIslandClick(229, 423)
+        case "SUN FLATS":
+            DelveSetProcess("SELECTING ISLAND", "SUN FLATS")
+            Sleep(500)
+            DelveIslandClick(332, 418)
+        case "FROSTBITE":
+            DelveSetProcess("SELECTING ISLAND", "FROSTBITE")
+            Sleep(500)
+            DelveIslandClick(445, 422)
+        case "MYCELIA":
+            DelveSetProcess("SELECTING ISLAND", "MYCELIA")
+            Sleep(500)
+            loop 3
+                DelveScrollDown(400, 400)
+            Sleep(300)
+            DelveIslandClick(246, 424)
+        case "PIRATE COVE":
+            DelveSetProcess("SELECTING ISLAND", "PIRATE COVE")
+            Sleep(500)
+            loop 3
+                DelveScrollDown(400, 400)
+            Sleep(300)
+            DelveIslandClick(345, 424)
+        case "INFERNIA":
+            DelveSetProcess("SELECTING ISLAND", "INFERNIA")
+            Sleep(500)
+            loop 3
+                DelveScrollDown(400, 400)
+            Sleep(300)
+            DelveIslandClick(447, 422)
+        case "THE ABYSS":
+            DelveSetProcess("SELECTING ISLAND", "THE ABYSS")
+            Sleep(500)
+            loop 3
+                DelveScrollDown(400, 400)
+            Sleep(300)
+            DelveIslandClick(264, 421)
+    }
+}
+
+DelveIslandClick(x, y) {
+    CoordMode "Mouse", "Screen"
+    MouseMove(x, y)
+    Sleep(20)
+    MouseClick("Left", x, y)
+}
+
+DelveScrollDown(x, y) {
+    CoordMode "Mouse", "Screen"
+    MouseMove(x, y)
+    Sleep(50)
+    Send("{WheelDown}")
+    Sleep(250)
+}
+
+DelveEnterMine() {
+    Sleep(1000)
+    DelveSetProcess("TELEPORTING", "Entering the mine...")
+    CoordMode "Mouse", "Screen"
+    loop 4 {
+        MouseMove(277, 277)
+        Sleep(20)
+        MouseClick("Left", 277, 277)
+        Sleep(100)
+    }
+    Sleep(3000)
+}
+
+DelveGetGridCount() {
+    islandName := FukkiGetState("DelveIsland", "")
+    switch islandName {
+        case "SUN FLATS": return 7
+        case "FROSTBITE": return 8
+        case "MYCELIA": return 9
+        case "PIRATE COVE": return 10
+        case "INFERNIA": return 11
+        case "THE ABYSS": return 11
+        default: return 6
+    }
+}
+
 DelveGetMovementDuration() {
     if !IsSet(DelveWalkSpeed)
         return 2000
@@ -126,17 +225,7 @@ DelveGetMovementDuration() {
         return 2000
     if IsSet(DelveLeadenBootsPact) && DelveLeadenBootsPact.Value
         walkSpeed := walkSpeed * 0.75
-    gridCount := 6
-    islandName := FukkiGetState("DelveIsland", "")
-    switch islandName {
-        case "GRASSLANDS": gridCount := 6
-        case "SUN FLATS": gridCount := 7
-        case "FROSTBITE": gridCount := 8
-        case "MYCELIA": gridCount := 9
-        case "PIRATE COVE": gridCount := 10
-        case "INFERNIA": gridCount := 11
-        case "THE ABYSS": gridCount := 11
-    }
+    gridCount := DelveGetGridCount()
     duration := Round((2000 * (gridCount / 6)) * (34.9 / walkSpeed))
     if (duration < 500)
         duration := 500
@@ -188,7 +277,6 @@ DelveStartMousePattern() {
         return
     if (DelveClickPattern.Text = "Mouse Pattern")
         return
-    DelveController.MousePatternTimerActive := true
     if (DelveClickPattern.Text = "Square")
         DelveController.MousePatternDirection := "Square"
     else if (InStr(DelveClickPattern.Text, "Left/Right"))
@@ -199,23 +287,43 @@ DelveStartMousePattern() {
 }
 
 DelveStopMousePattern() {
-    DelveController.MousePatternTimerActive := false
     SetTimer(DelveMousePatternTick, 0)
+}
+
+DelveStartAutoDash() {
+    if !IsSet(DelveAutoDash)
+        return
+    if (DelveAutoDash.Value)
+        SetTimer(DelveAutoDashTick, 500)
+}
+
+DelveStopAutoDash() {
+    SetTimer(DelveAutoDashTick, 0)
+}
+
+DelveAutoDashTick() {
+    if !FukkiGetState("Running", false)
+        return
+    if (FukkiGetState("DelveState", "") != "ORE")
+        return
+    Send("q")
 }
 
 DelveMousePatternTick() {
     if !FukkiGetState("Running", false)
         return
     if (DelveClickPattern.Text = "Square") {
+        gridCount := DelveGetGridCount()
+        size := Round(75 * gridCount / 6)
         squarePoints := [
-            {X: 325, Y: 185},
-            {X: 400, Y: 185},
-            {X: 475, Y: 185},
-            {X: 475, Y: 260},
-            {X: 475, Y: 335},
-            {X: 400, Y: 335},
-            {X: 325, Y: 335},
-            {X: 325, Y: 260}
+            {X: 400 - size, Y: 260 - size},
+            {X: 400, Y: 260 - size},
+            {X: 400 + size, Y: 260 - size},
+            {X: 400 + size, Y: 260},
+            {X: 400 + size, Y: 260 + size},
+            {X: 400, Y: 260 + size},
+            {X: 400 - size, Y: 260 + size},
+            {X: 400 - size, Y: 260}
         ]
         point := squarePoints[DelveController.MouseSquareIndex + 1]
         MouseMove(point.X, point.Y)
@@ -223,21 +331,28 @@ DelveMousePatternTick() {
         return
     }
     if (InStr(DelveClickPattern.Text, "Left/Right")) {
+        gridCount := DelveGetGridCount()
+        leftX := 400 - Round(25 * gridCount / 6)
+        rightX := 400 + Round(25 * gridCount / 6)
         if (DelveController.MousePatternDirection = "Left") {
-            MouseMove(120, 260)
+            MouseMove(leftX, 260)
             DelveController.MousePatternDirection := "Right"
         } else {
-            MouseMove(680, 260)
+            MouseMove(rightX, 260)
             DelveController.MousePatternDirection := "Left"
         }
         return
     }
 
     if (DelveController.MousePatternDirection = "Up") {
-        MouseMove(400, 80)
+        gridCount := DelveGetGridCount()
+        topY := 260 - Round(50 * gridCount / 6)
+        MouseMove(400, topY)
         DelveController.MousePatternDirection := "Down"
     } else {
-        MouseMove(400, 330)
+        gridCount := DelveGetGridCount()
+        bottomY := 260 + Round(50 * gridCount / 6)
+        MouseMove(400, bottomY)
         DelveController.MousePatternDirection := "Up"
     }
 }

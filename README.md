@@ -1,4 +1,4 @@
-# ASTDX_FUKKI
+# tetoMacro - tetoDelve
 
 AutoHotkey v2 macro for Delve.
 
@@ -9,7 +9,7 @@ AutoHotkey v2 macro for Delve.
 - `src/Core/` contains state, loop, and input coordination.
 - `src/Detection/` contains screen capture and FindText detection.
 - `src/Input/` contains keyboard and mouse infrastructure.
-- `src/UI/` contains the Fukki GUI.
+- `src/UI/` contains the tetoMacro GUI.
 - `src/Utils/` contains configuration and logging.
 - `src/Game/Delve/` contains Delve patterns and automation.
 
