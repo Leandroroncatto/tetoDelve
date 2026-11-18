@@ -92,6 +92,10 @@ class DelveController {
         if (stateName = "ORE") {
             DelveStartMovementPattern()
             DelveStartMousePattern()
+            DelveStopAutoDash()
+        } else if (stateName = "MOBS" || stateName = "BOSS") {
+            DelveStopMovementPattern()
+            DelveStopMousePattern()
             DelveStartAutoDash()
         } else {
             DelveStopMovementPattern()
@@ -126,6 +130,11 @@ DelveGoToMine() {
 
 DelveSelectIsland() {
     islandName := FukkiGetState("DelveIsland", "")
+    CoordMode "Mouse", "Screen"
+    MouseMove(400, 400)
+    loop 20
+        Send("{WheelUp}")
+    Sleep(500)
     switch islandName {
         case "GRASSLANDS":
             DelveSetProcess("SELECTING ISLAND", "GRASSLANDS")
@@ -304,7 +313,8 @@ DelveStopAutoDash() {
 DelveAutoDashTick() {
     if !FukkiGetState("Running", false)
         return
-    if (FukkiGetState("DelveState", "") != "ORE")
+    stateName := FukkiGetState("DelveState", "")
+    if (stateName != "MOBS" && stateName != "BOSS")
         return
     Send("q")
 }

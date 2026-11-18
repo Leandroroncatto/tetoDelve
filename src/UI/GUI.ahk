@@ -148,9 +148,9 @@ if (FukkiGetState("Game") = "Delve") {
     DelveSaveConfigButton.OnEvent("Click", (*) => SaveDelveConfig())
     aaMainUI.SetFont("bold s9 q5 c" uiTheme[1], "Segoe UI")
     global DelveAutoDash := aaMainUI.Add("Checkbox", "x808 y205 w170 h24", "Auto Dash")
-    global DelveAutoDashHelp := aaMainUI.Add("Text", "x978 y205 w18 h18 +Center +Border", "?")
+    global DelveAutoDashHelp := aaMainUI.Add("Text", "x983 y205 w18 h18 +Center +Border", "?")
     DelveAutoDashHelp.OnEvent("Click", (*) => MsgBox(
-        "Auto Dash sends Q every 500 ms while ORE is detected."
+        "Auto Dash sends Q every 500 ms while MOBS or BOSS is detected."
         "`nIt is not recommended because it can break the timing of your movement pattern."
         "`nDisable it if Left/Right or Top/Bottom movement becomes inconsistent.",
         "Auto Dash",
