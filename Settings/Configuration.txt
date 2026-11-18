@@ -1,16 +1,6 @@
-Mode=
-
-
-Enabled1=1
-Enabled2=1
-Enabled3=1
-Enabled4=0
-Enabled5=1
-Enabled6=1
-
-Placement1=3
-Placement2=3
-Placement3=4
-Placement4=3
-Placement5=3
-Placement6=1
+Game=Delve
+Mode=Mine
+Island=GRASSLANDS
+AutoReplay=1
+MovementPattern=Movement Pattern
+ClickPattern=Mouse Pattern

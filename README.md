@@ -1,11 +1,19 @@
-# ASTDX_FUKKI Version
-This macro is based on MIST AA macro
+# ASTDX_FUKKI
 
-credits: MIST & FAXI
+AutoHotkey v2 macro for Delve.
 
-This macro is intended for educational purposes.
-Contributions
-Want to help improve this version? Fork the repository and submit a pull request with your enhancements or fixes.
+## Structure
+
+- `Main.ahk` is the application entry point.
+- `src/App.ahk` loads the shared infrastructure and Delve modules.
+- `src/Core/` contains state, loop, and input coordination.
+- `src/Detection/` contains screen capture and FindText detection.
+- `src/Input/` contains keyboard and mouse infrastructure.
+- `src/UI/` contains the Fukki GUI.
+- `src/Utils/` contains configuration and logging.
+- `src/Game/Delve/` contains Delve patterns and automation.
+
+The FindText library remains under `Lib/FindText.ahk`.
 
 License
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software (the "Software"), to use the Software for personal purposes, subject to the following conditions:
