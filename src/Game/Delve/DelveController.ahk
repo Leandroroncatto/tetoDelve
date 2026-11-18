@@ -237,6 +237,9 @@ DelveGetMovementDuration() {
     gridCount := DelveGetGridCount()
     duration := Round((2000 * (gridCount / 6)) * (34.9 / walkSpeed))
     duration -= 500
+    if IsSet(DelveAutoDash) && DelveAutoDash.Value
+        && (FukkiGetState("DelveState", "") = "MOBS" || FukkiGetState("DelveState", "") = "BOSS")
+        duration := Round(duration / 2)
     if (duration < 500)
         duration := 500
     if (duration > 6000)
