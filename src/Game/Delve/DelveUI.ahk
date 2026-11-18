@@ -33,6 +33,14 @@ global DelveRunStartTime := 0
 global DelveTotalRuns := 0
 global DelveMacroStartTime := 0
 global DelveRunDurations := []
+global DelveRunLog := []
+
+DelveAddRunLog(message) {
+    global DelveRunLog
+    if (DelveRunLog.Length >= 20)
+        DelveRunLog.RemoveAt(1)
+    DelveRunLog.Push(Format("[{}] {}", FormatTime(A_Now, "HH:mm:ss"), message))
+}
 
 DelveStartRunTimer() {
     global DelveRunStartTime
@@ -43,18 +51,22 @@ DelveStartRunTimer() {
     DelveRunDurations := []
     DelveMacroStartTime := A_TickCount
     DelveRunStartTime := A_TickCount
+    DelveRunLog := []
     UpdateDelveRunDisplay()
     SetTimer(UpdateDelveRunDisplay, 1000)
 }
 
-DelveResetRunTimer() {
+DelveResetRunTimer(sendWebhook := true) {
     global DelveRunStartTime, DelveRunDurations
+    runLength := 0
     if (DelveRunStartTime) {
         runLength := A_TickCount - DelveRunStartTime
         if (runLength > 0)
             DelveRunDurations.Push(runLength)
     }
     DelveRunStartTime := A_TickCount
+    if (sendWebhook && runLength > 0)
+        DelveSendRunWebhook(runLength)
     UpdateDelveRunDisplay()
 }
 

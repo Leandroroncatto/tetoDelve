@@ -84,6 +84,8 @@ class DelveController {
             return
         DelveController.LastState := stateName
         FukkiSetDelveState(stateName)
+        DelveAddRunLog(stateName)
+        DelveAddRunLog(stateName)
         if (DelveController.EquippedKey != keyToSend) {
             DelveController.EquippedKey := keyToSend
             SendInput(keyToSend)
@@ -398,11 +400,16 @@ DelveAutoReplayTick() {
     DelveController.ReplayLastClick := A_TickCount
     DelveController.EquippedKey := ""
     DelveController.ReplayCandidateCount := 0
+    DelveAddRunLog("BACK TO MINE")
     global DelveTotalRuns
+    global DelveRunStartTime
+    DelveTotalRuns++
+    runLength := A_TickCount - DelveRunStartTime
+    if (runLength > 0)
+        DelveSendRunWebhook(runLength)
     CoordMode "Mouse", "Screen"
     MouseMove(foundX, foundY)
     Sleep(20)
     MouseClick("Left", foundX, foundY)
-    DelveTotalRuns++
-    DelveResetRunTimer()
+    DelveResetRunTimer(false)
 }

@@ -3,7 +3,8 @@
 
 ; Basic Application Info
 global aaTitle := "tetoMacro"
-global version := " - tetoDelve"
+global version := " - tetoDelve v1.0.0"
+global credits := "Created by leleo1337_"
 global rblxID := "ahk_exe RobloxPlayerBeta.exe"
 ;Coordinate and Positioning Variables
 global targetWidth := 816
@@ -98,7 +99,7 @@ global FakeFukki := aaMainUI.Add("Picture", "x1270 y550 w80 h80 +BackgroundTrans
 
 global robloxHolder := aaMainUI.Add("Text", "x3 y33 w797 h597 +Background" uiTheme[5], "") ;Roblox window box
 global Discord := aaMainUI.Add("Picture", "x1270 y4 w24 h24 +BackgroundTrans", Discord) ;Discord logo
-;Discord.OnEvent("Click", (*) => OpenDiscordLink()) ;Open discord
+Discord.OnEvent("Click", (*) => OpenDiscordLink()) ;Open discord
 global exitButton := aaMainUI.Add("Picture", "x1330 y1 w32 h32 +BackgroundTrans", Exitbutton) ;Exit image
 exitButton.OnEvent("Click", (*) => Destroy()) ;Exit button
 global minimizeButton := aaMainUI.Add("Picture", "x1300 y3 w27 h27 +Background" uiTheme[2], Minimize) ;Minimize gui
@@ -146,6 +147,9 @@ if (FukkiGetState("Game") = "Delve") {
     global DelveSaveConfigButton := aaMainUI.Add("Picture",
         "x805 y400 w25 h28 +BackgroundTrans", SaveImg)
     DelveSaveConfigButton.OnEvent("Click", (*) => SaveDelveConfig())
+    global DelveWebhookButton := aaMainUI.Add("Button",
+        "x845 y400 w90 h28", "Webhook")
+    DelveWebhookButton.OnEvent("Click", (*) => ShowDelveWebhookSetup())
     aaMainUI.SetFont("bold s9 q5 c" uiTheme[1], "Segoe UI")
     global DelveAutoDash := aaMainUI.Add("Checkbox", "x808 y205 w170 h24", "Auto Dash")
     global DelveAutoDashHelp := aaMainUI.Add("Text", "x983 y205 w18 h18 +Center +Border", "?")
@@ -202,6 +206,10 @@ ProcessLog(current) {
     Sleep(50)
     FileAppend(current . " " . elapsedTime . "`n", currentOutputFile)
 
+}
+
+OpenDiscordLink() {
+    Run("https://discord.gg/rPUG9fex3")
 }
 
 ;Timer

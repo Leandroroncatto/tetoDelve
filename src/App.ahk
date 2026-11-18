@@ -7,6 +7,7 @@ SendMode "Event"
 #Include %A_ScriptDir%\src\Detection\FindTextDetector.ahk
 #Include %A_ScriptDir%\src\Utils\Logger.ahk
 #Include %A_ScriptDir%\src\Utils\Config.ahk
+#Include %A_ScriptDir%\src\Utils\Webhook.ahk
 
 ; External libraries
 #Include %A_ScriptDir%\Lib\FindText.ahk
