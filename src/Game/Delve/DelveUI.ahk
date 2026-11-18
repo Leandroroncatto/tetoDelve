@@ -22,6 +22,11 @@ DelveSetProcess(titleText, detailText := "") {
     process1.Value := titleText
     process2.SetFont("c" uiTheme[1])
     process2.Value := detailText
+    process3.Value := ""
+    process4.Value := ""
+    process5.Value := ""
+    process6.Value := ""
+    process7.Value := ""
 }
 
 global DelveRunStartTime := 0
@@ -36,8 +41,7 @@ DelveStartRunTimer() {
     global DelveRunDurations
     DelveTotalRuns := 0
     DelveRunDurations := []
-    if (DelveMacroStartTime = 0)
-        DelveMacroStartTime := A_TickCount
+    DelveMacroStartTime := A_TickCount
     DelveRunStartTime := A_TickCount
     UpdateDelveRunDisplay()
     SetTimer(UpdateDelveRunDisplay, 1000)
@@ -96,8 +100,8 @@ ShowDelveRunReport() {
 }
 
 UpdateDelveRunDisplay() {
-    global DelveRunStartTime := 0
-    global DelveTotalRuns := 0
+    global DelveRunStartTime
+    global DelveTotalRuns
     islandName := FukkiGetState("DelveIsland", "")
     elapsedMilliseconds := 0
     if (DelveRunStartTime > 0)

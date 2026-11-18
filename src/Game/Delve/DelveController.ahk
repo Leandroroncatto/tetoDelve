@@ -94,8 +94,8 @@ class DelveController {
             DelveStartMousePattern()
             DelveStopAutoDash()
         } else if (stateName = "MOBS" || stateName = "BOSS") {
-            DelveStopMovementPattern()
-            DelveStopMousePattern()
+            DelveStartMovementPattern()
+            DelveStartMousePattern()
             DelveStartAutoDash()
         } else {
             DelveStopMovementPattern()
@@ -222,20 +222,21 @@ DelveGetGridCount() {
 
 DelveGetMovementDuration() {
     if !IsSet(DelveWalkSpeed)
-        return 2000
+        return 1500
     walkSpeedText := Trim(DelveWalkSpeed.Text)
     if (walkSpeedText = "")
-        return 2000
+        return 1500
     walkSpeed := 0
     try walkSpeed := Float(walkSpeedText)
     catch
-        return 2000
+        return 1500
     if (walkSpeed <= 0)
-        return 2000
+        return 1500
     if IsSet(DelveLeadenBootsPact) && DelveLeadenBootsPact.Value
         walkSpeed := walkSpeed * 0.75
     gridCount := DelveGetGridCount()
     duration := Round((2000 * (gridCount / 6)) * (34.9 / walkSpeed))
+    duration -= 500
     if (duration < 500)
         duration := 500
     if (duration > 6000)
@@ -393,6 +394,7 @@ DelveAutoReplayTick() {
 
     DelveController.ReplayLastClick := A_TickCount
     DelveController.EquippedKey := ""
+    DelveController.ReplayCandidateCount := 0
     global DelveTotalRuns
     CoordMode "Mouse", "Screen"
     MouseMove(foundX, foundY)

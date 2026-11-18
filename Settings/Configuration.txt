@@ -1,9 +1,9 @@
 Game=Delve
 Mode=Mine
-Island=GRASSLANDS
+Island=PIRATE COVE
 AutoReplay=1
 MovementPattern=Top/Bottom
-ClickPattern=Top/Bottom
+ClickPattern=Square
 WalkSpeed=34.9
-AutoDash=0
+AutoDash=1
 LeadenBootsPact=0
